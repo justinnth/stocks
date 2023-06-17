@@ -1,6 +1,10 @@
 import "../globals.css"
 import { Inter } from "next/font/google"
 
+import { Search } from "@/components/molecules/Search"
+import { MainNav } from "@/components/organisms/MainNav"
+import TeamSwitcher from "@/components/organisms/TeamSwitcher"
+import { UserNav } from "@/components/organisms/UserNav"
 import { Providers } from "@/utils/providers"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -15,7 +19,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <main className="p-4">{children}</main>
+          <main className="flex-col md:flex">
+            <div className="border-b">
+              <div className="flex h-16 items-center px-4">
+                <TeamSwitcher />
+                <MainNav className="mx-6" />
+                <div className="ml-auto flex items-center space-x-4">
+                  <Search />
+                  <UserNav />
+                </div>
+              </div>
+            </div>
+            <div className="flex-1 space-y-4 p-8 pt-6">
+              <div className="flex items-center justify-between space-y-2">
+                <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+              </div>
+              {children}
+            </div>
+          </main>
         </Providers>
       </body>
     </html>
