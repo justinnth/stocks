@@ -2,29 +2,26 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Controller, useForm } from "react-hook-form"
-import {
-  emailPasswordSignIn,
-  emailPasswordSignUp,
-} from "supertokens-auth-react/recipe/thirdpartyemailpassword"
+import { emailPasswordSignIn } from "supertokens-auth-react/recipe/thirdpartyemailpassword"
 import { z } from "zod"
 
-const signInSchema = z.object({
+const loginSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 })
 
-type SignInSchemaType = z.infer<typeof signInSchema>
+type LoginSchemaType = z.infer<typeof loginSchema>
 
-export const SignInForm = () => {
+export const LoginForm = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignInSchemaType>({
-    resolver: zodResolver(signInSchema),
+  } = useForm<LoginSchemaType>({
+    resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = async ({ email, password }: SignInSchemaType) => {
+  const onSubmit = async ({ email, password }: LoginSchemaType) => {
     try {
       let response = await emailPasswordSignIn({
         formFields: [
