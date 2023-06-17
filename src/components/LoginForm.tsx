@@ -60,7 +60,7 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
       } else {
         // sign in successful. The session tokens are automatically handled by
         // the frontend SDK.
-        window.location.href = "/"
+        window.location.href = "/dashboard"
       }
     } catch (err: any) {
       if (err.isSuperTokensGeneralError === true) {

@@ -65,7 +65,7 @@ export const SignUpForm = ({ className, ...props }: SignUpFormProps) => {
         })
       } else {
         setIsLoading(false)
-        window.location.href = "/"
+        window.location.href = "/dashboard"
       }
     } catch (err: any) {
       if (err.isSuperTokensGeneralError === true) {

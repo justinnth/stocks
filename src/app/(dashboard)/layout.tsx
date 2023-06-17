@@ -1,4 +1,4 @@
-import "./globals.css"
+import "../globals.css"
 import { Inter } from "next/font/google"
 
 import { Providers } from "@/utils/providers"
@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <main>{children}</main>
+          <main className="p-4">{children}</main>
         </Providers>
       </body>
     </html>
