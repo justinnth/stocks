@@ -1,12 +1,17 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { HTMLAttributes, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import {
-  emailPasswordSignIn,
-  getAuthorisationURLWithQueryParamsAndSetState,
-} from "supertokens-auth-react/recipe/thirdpartyemailpassword"
+import { emailPasswordSignIn } from "supertokens-auth-react/recipe/thirdpartyemailpassword"
 import { z } from "zod"
+
+import { Button } from "@/components/atoms/Button"
+import { Icons } from "@/components/atoms/Icons"
+import { Input } from "@/components/atoms/Input"
+import { Label } from "@/components/atoms/Label"
+import { SocialSignInButton } from "@/components/molecules/SocialSignInButton"
+import { cn } from "@/lib/utils"
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -15,7 +20,11 @@ const loginSchema = z.object({
 
 type LoginSchemaType = z.infer<typeof loginSchema>
 
-export const LoginForm = () => {
+interface LoginFormProps extends HTMLAttributes<HTMLDivElement> {}
+
+export const LoginForm = ({ className, ...props }: LoginFormProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     control,
     handleSubmit,
@@ -63,100 +72,73 @@ export const LoginForm = () => {
     }
   }
 
-  const googleSignInClicked = async () => {
-    try {
-      const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
-        providerId: "google",
-        authorisationURL: "http://localhost:3000/auth/callback/google",
-      })
-
-      /*
-        Example value of authUrl: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&access_type=offline&include_granted_scopes=true&response_type=code&client_id=1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com&state=5a489996a28cafc83ddff&redirect_uri=https%3A%2F%2Fsupertokens.io%2Fdev%2Foauth%2Fredirect-to-app&flowName=GeneralOAuthFlow
-        */
-
-      console.log(authUrl)
-
-      // we redirect the user to google for auth.
-      window.location.assign(authUrl)
-    } catch (err: any) {
-      if (err.isSuperTokensGeneralError === true) {
-        // this may be a custom error message sent from the API by you.
-        window.alert(err.message)
-      } else {
-        window.alert("Oops! Something went wrong.")
-      }
-    }
-  }
-
-  const githubSignInClicked = async () => {
-    try {
-      const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
-        providerId: "github",
-        authorisationURL: "http://localhost:3000/auth/callback/github",
-      })
-
-      /*
-        Example value of authUrl: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&access_type=offline&include_granted_scopes=true&response_type=code&client_id=1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com&state=5a489996a28cafc83ddff&redirect_uri=https%3A%2F%2Fsupertokens.io%2Fdev%2Foauth%2Fredirect-to-app&flowName=GeneralOAuthFlow
-        */
-
-      // we redirect the user to google for auth.
-      window.location.assign(authUrl)
-    } catch (err: any) {
-      if (err.isSuperTokensGeneralError === true) {
-        // this may be a custom error message sent from the API by you.
-        window.alert(err.message)
-      } else {
-        window.alert("Oops! Something went wrong.")
-      }
-    }
-  }
-
-  const appleSignInClicked = async () => {
-    try {
-      const authUrl = await getAuthorisationURLWithQueryParamsAndSetState({
-        providerId: "apple",
-        authorisationURL: "http://localhost:3000/auth/callback/apple",
-      })
-
-      /*
-        Example value of authUrl: https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&access_type=offline&include_granted_scopes=true&response_type=code&client_id=1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com&state=5a489996a28cafc83ddff&redirect_uri=https%3A%2F%2Fsupertokens.io%2Fdev%2Foauth%2Fredirect-to-app&flowName=GeneralOAuthFlow
-        */
-
-      // we redirect the user to google for auth.
-      window.location.assign(authUrl)
-    } catch (err: any) {
-      if (err.isSuperTokensGeneralError === true) {
-        // this may be a custom error message sent from the API by you.
-        window.alert(err.message)
-      } else {
-        window.alert("Oops! Something went wrong.")
-      }
-    }
-  }
-
   return (
-    <>
-      <button onClick={googleSignInClicked}>Sign up with Google</button>
-      <button onClick={githubSignInClicked}>Sign up with Github</button>
-      <button onClick={appleSignInClicked}>Sign up with Apple</button>
+    <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email">Email</label>
-        <Controller
-          name="email"
-          control={control}
-          rules={{ required: true }}
-          render={({ field }) => <input id="email" type="email" {...field} />}
-        />
+        <div className="grid gap-2">
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="email">
+              Email
+            </Label>
+            <Controller
+              name="email"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Input
+                  id="email"
+                  placeholder="name@example.com"
+                  type="email"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  autoCorrect="off"
+                  disabled={isLoading}
+                  {...field}
+                />
+              )}
+            />
 
-        <label htmlFor="password">Password</label>
-        <Controller
-          name="password"
-          control={control}
-          rules={{ required: true }}
-          render={({ field }) => <input id="password" type="password" {...field} />}
-        />
-        <button type="submit">Login</button>
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Controller
+              name="password"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="password"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  disabled={isLoading}
+                  {...field}
+                />
+              )}
+            />
+          </div>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+            Sign in
+          </Button>
+        </div>
       </form>
-    </>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+        </div>
+      </div>
+
+      <div className="flex justify-between">
+        <SocialSignInButton provider="google" text="Google" />
+        <SocialSignInButton provider="github" text="Github" />
+        <SocialSignInButton provider="apple" text="Apple" />
+      </div>
+    </div>
   )
 }

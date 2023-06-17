@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { thirdPartySignInAndUp } from "supertokens-auth-react/recipe/thirdpartyemailpassword"
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/atoms/Alert"
+import { Icons } from "@/components/atoms/Icons"
+
 export default function GoogleCallback() {
   const router = useRouter()
 
@@ -37,8 +40,12 @@ export default function GoogleCallback() {
   }
 
   return (
-    <main>
-      <p>Google callback</p>
-    </main>
+    <div className="container mx-auto">
+      <Alert>
+        <Icons.spinner className="h-4 w-4 animate-spin" />
+        <AlertTitle>Google</AlertTitle>
+        <AlertDescription>Sign in successful. Redirecting...</AlertDescription>
+      </Alert>
+    </div>
   )
 }
