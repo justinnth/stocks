@@ -26,19 +26,12 @@ import {
 import { Input } from "@/components/atoms/Input"
 import { Label } from "@/components/atoms/Label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/atoms/Popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/atoms/Select"
 import { cn } from "@/lib/utils"
 
 const groups = [
   {
     label: "Personal Account",
-    teams: [
+    portfolios: [
       {
         label: "Alicia Koch",
         value: "personal",
@@ -46,8 +39,8 @@ const groups = [
     ],
   },
   {
-    label: "Teams",
-    teams: [
+    label: "Portfolios",
+    portfolios: [
       {
         label: "Acme Inc.",
         value: "acme-inc",
@@ -60,16 +53,16 @@ const groups = [
   },
 ]
 
-type Team = (typeof groups)[number]["teams"][number]
+type Portfolio = (typeof groups)[number]["portfolios"][number]
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
-interface TeamSwitcherProps extends PopoverTriggerProps {}
+interface PortfolioSwitcherProps extends PopoverTriggerProps {}
 
-export default function TeamSwitcher({ className }: TeamSwitcherProps) {
+export function PortfolioSwitcher({ className }: PortfolioSwitcherProps) {
   const [open, setOpen] = useState(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
-  const [selectedTeam, setSelectedTeam] = useState<Team>(groups[0].teams[0])
+  const [selectedTeam, setSelectedTeam] = useState<Portfolio>(groups[0].portfolios[0])
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -101,7 +94,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
               <CommandEmpty>No team found.</CommandEmpty>
               {groups.map((group) => (
                 <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
+                  {group.portfolios.map((team) => (
                     <CommandItem
                       key={team.value}
                       onSelect={() => {
@@ -140,7 +133,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                     }}
                   >
                     <PlusCircle className="mr-2 h-5 w-5" />
-                    Create Team
+                    Create Portfolio
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>
@@ -150,32 +143,14 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
       </Popover>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create team</DialogTitle>
-          <DialogDescription>Add a new team to manage products and customers.</DialogDescription>
+          <DialogTitle>Create portfolio</DialogTitle>
+          <DialogDescription>Add a new portfolio to manage your stocks.</DialogDescription>
         </DialogHeader>
         <div>
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
+              <Label htmlFor="name">Portfolio name</Label>
               <Input id="name" placeholder="Acme Inc." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">Trial for two weeks</span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">$9/month per user</span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </div>
         </div>

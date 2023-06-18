@@ -1,9 +1,8 @@
 import "../globals.css"
 import { Inter } from "next/font/google"
 
-import { Search } from "@/components/molecules/Search"
 import { MainNav } from "@/components/organisms/MainNav"
-import TeamSwitcher from "@/components/organisms/TeamSwitcher"
+import { PortfolioSwitcher } from "@/components/organisms/PortfolioSwitcher"
 import { UserNav } from "@/components/organisms/UserNav"
 import { Providers } from "@/utils/providers"
 
@@ -22,10 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="flex-col md:flex">
             <div className="border-b">
               <div className="flex h-16 items-center px-4">
-                <TeamSwitcher />
+                <PortfolioSwitcher />
                 <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-4">
-                  <Search />
                   <UserNav />
                 </div>
               </div>

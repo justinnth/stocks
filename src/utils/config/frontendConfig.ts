@@ -24,8 +24,7 @@ export const frontendConfig = {
       location: {
         ...oI.location,
         setHref: (href: string) => {
-          console.log(href)
-          redirect(href)
+          window.location.href = href
         },
       },
     }
