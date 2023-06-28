@@ -1,8 +1,8 @@
 "use client"
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import { LogOut, PlusCircle, Settings, User } from "lucide-react"
 import { useRouter } from "next/navigation"
-import Session from "supertokens-auth-react/recipe/session"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/atoms/Avatar"
 import { Button } from "@/components/atoms/Button"
@@ -18,9 +18,10 @@ import {
 
 export function UserNav() {
   const router = useRouter()
+  const supabase = createClientComponentClient()
 
   const logout = async () => {
-    await Session.signOut()
+    await supabase.auth.signOut()
     router.push("/login")
   }
 

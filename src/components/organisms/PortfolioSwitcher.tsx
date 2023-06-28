@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/atoms/Input"
 import { Label } from "@/components/atoms/Label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/atoms/Popover"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/utils"
 
 const groups = [
   {

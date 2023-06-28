@@ -1,9 +1,10 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+import { usePathname } from "next/navigation"
 import { HTMLAttributes, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
-import { emailPasswordSignIn } from "supertokens-auth-react/recipe/thirdpartyemailpassword"
 import { z } from "zod"
 
 import { Button } from "@/components/atoms/Button"
@@ -11,7 +12,7 @@ import { Icons } from "@/components/atoms/Icons"
 import { Input } from "@/components/atoms/Input"
 import { Label } from "@/components/atoms/Label"
 import { SocialSignInButton } from "@/components/molecules/SocialSignInButton"
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/utils"
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -25,6 +26,9 @@ interface LoginFormProps extends HTMLAttributes<HTMLDivElement> {}
 export const LoginForm = ({ className, ...props }: LoginFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
+  const pathname = usePathname()
+  const supabase = createClientComponentClient()
+
   const {
     control,
     handleSubmit,
@@ -33,42 +37,57 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
     resolver: zodResolver(loginSchema),
   })
 
-  const onSubmit = async ({ email, password }: LoginSchemaType) => {
+  const handleSignUp = async ({ email, password }: LoginSchemaType) => {
+    setIsLoading(true)
+
     try {
-      let response = await emailPasswordSignIn({
-        formFields: [
-          {
-            id: "email",
-            value: email,
-          },
-          {
-            id: "password",
-            value: password,
-          },
-        ],
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
       })
 
-      if (response.status === "FIELD_ERROR") {
-        response.formFields.forEach((formField) => {
-          if (formField.id === "email") {
-            // Email validation failed (for example incorrect email syntax).
-            window.alert(formField.error)
-          }
-        })
-      } else if (response.status === "WRONG_CREDENTIALS_ERROR") {
-        window.alert("Email password combination is incorrect.")
-      } else {
-        // sign in successful. The session tokens are automatically handled by
-        // the frontend SDK.
+      if (error) {
+        throw error
+      }
+
+      if (data.user) {
+        setIsLoading(false)
         window.location.href = "/dashboard"
       }
     } catch (err: any) {
-      if (err.isSuperTokensGeneralError === true) {
-        // this may be a custom error message sent from the API by you.
-        window.alert(err.message)
-      } else {
-        window.alert("Oops! Something went wrong.")
+      window.alert(err.message)
+      window.alert("Oops! Something went wrong.")
+    }
+  }
+
+  const handleSignIn = async ({ email, password }: LoginSchemaType) => {
+    try {
+      setIsLoading(true)
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        throw error
       }
+
+      if (data.user) {
+        setIsLoading(false)
+        window.location.href = "/dashboard"
+      }
+    } catch (err: any) {
+      window.alert(err.message)
+      window.alert("Oops! Something went wrong.")
+    }
+  }
+
+  const onSubmit = ({ email, password }: LoginSchemaType) => {
+    if (pathname === "/signup") {
+      handleSignUp({ email, password })
+    } else {
+      handleSignIn({ email, password })
     }
   }
 
@@ -134,10 +153,9 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
         </div>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex gap-2">
         <SocialSignInButton provider="google" text="Google" />
         <SocialSignInButton provider="github" text="Github" />
-        <SocialSignInButton provider="apple" text="Apple" />
       </div>
     </div>
   )

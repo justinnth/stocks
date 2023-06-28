@@ -11,6 +11,7 @@ const envVariables = z.object({
   APPLE_KEY_ID: z.string(),
   APPLE_PRIVATE_KEY: z.string(),
   APPLE_TEAM_ID: z.string(),
+  DATABASE_URL: z.string(),
 })
 
 envVariables.parse(process.env)

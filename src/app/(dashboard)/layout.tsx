@@ -1,10 +1,9 @@
-import "../globals.css"
+import "@/styles/globals.css"
 import { Inter } from "next/font/google"
 
 import { MainNav } from "@/components/organisms/MainNav"
 import { PortfolioSwitcher } from "@/components/organisms/PortfolioSwitcher"
 import { UserNav } from "@/components/organisms/UserNav"
-import { Providers } from "@/utils/providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -17,25 +16,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <main className="flex-col md:flex">
-            <div className="border-b">
-              <div className="flex h-16 items-center px-4">
-                <PortfolioSwitcher />
-                <MainNav className="mx-6" />
-                <div className="ml-auto flex items-center space-x-4">
-                  <UserNav />
-                </div>
+        <main className="flex-col md:flex">
+          <div className="border-b">
+            <div className="flex h-16 items-center px-4">
+              <PortfolioSwitcher />
+              <MainNav className="mx-6" />
+              <div className="ml-auto flex items-center space-x-4">
+                <UserNav />
               </div>
             </div>
-            <div className="flex-1 space-y-4 p-8 pt-6">
-              <div className="flex items-center justify-between space-y-2">
-                <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-              </div>
-              {children}
+          </div>
+          <div className="flex-1 space-y-4 p-8 pt-6">
+            <div className="flex items-center justify-between space-y-2">
+              <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             </div>
-          </main>
-        </Providers>
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   )

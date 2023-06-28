@@ -2,8 +2,8 @@ import { Metadata } from "next"
 import Link from "next/link"
 
 import { buttonVariants } from "@/components/atoms/Button"
-import { SignUpForm } from "@/components/organisms/SignUpForm"
-import { cn } from "@/lib/utils"
+import { LoginForm } from "@/components/organisms/LoginForm"
+import { cn } from "@/utils/utils"
 
 export const metadata: Metadata = {
   title: "Signup to Stocks",
@@ -30,7 +30,7 @@ export default function SignUp() {
               Enter your email below to create your account
             </p>
           </div>
-          <SignUpForm />
+          <LoginForm />
         </div>
       </div>
     </>
