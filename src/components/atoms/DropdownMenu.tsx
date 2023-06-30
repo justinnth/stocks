@@ -5,7 +5,7 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { ComponentPropsWithoutRef, ElementRef, HTMLAttributes, forwardRef } from "react"
 
-import { cn } from "@/utils/utils"
+import { cn } from "@/utils/cn"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 

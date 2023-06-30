@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:introspect": "drizzle-kit introspect:pg",
+    "db:generate": "drizzle-kit generate:pg"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -46,7 +48,7 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "autoprefixer": "^10.4.14",
-    "drizzle-kit": "^0.19.1",
+    "drizzle-kit": "^0.19.2",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.27.5",
     "postcss": "^8.4.24",

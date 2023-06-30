@@ -5,7 +5,7 @@ import { Check, ChevronDown } from "lucide-react"
 
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react"
 
-import { cn } from "@/utils/utils"
+import { cn } from "@/utils/cn"
 
 const Select = SelectPrimitive.Root
 

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { HTMLAttributes, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -12,7 +12,8 @@ import { Icons } from "@/components/atoms/Icons"
 import { Input } from "@/components/atoms/Input"
 import { Label } from "@/components/atoms/Label"
 import { SocialSignInButton } from "@/components/molecules/SocialSignInButton"
-import { cn } from "@/utils/utils"
+import { cn } from "@/utils/cn"
+import { signUp } from "@/utils/signUp"
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -28,6 +29,7 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
 
   const pathname = usePathname()
   const supabase = createClientComponentClient()
+  const router = useRouter()
 
   const {
     control,
@@ -39,24 +41,11 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
 
   const handleSignUp = async ({ email, password }: LoginSchemaType) => {
     setIsLoading(true)
+    const res = await signUp(email, password)
 
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      })
-
-      if (error) {
-        throw error
-      }
-
-      if (data.user) {
-        setIsLoading(false)
-        window.location.href = "/dashboard"
-      }
-    } catch (err: any) {
-      window.alert(err.message)
-      window.alert("Oops! Something went wrong.")
+    if (res && res.id) {
+      setIsLoading(false)
+      router.replace("/dashboard")
     }
   }
 
@@ -84,7 +73,7 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
   }
 
   const onSubmit = ({ email, password }: LoginSchemaType) => {
-    if (pathname === "/signup") {
+    if (pathname === "/sign-up") {
       handleSignUp({ email, password })
     } else {
       handleSignIn({ email, password })
@@ -139,7 +128,7 @@ export const LoginForm = ({ className, ...props }: LoginFormProps) => {
           </div>
           <Button type="submit" disabled={isLoading}>
             {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-            Sign in
+            {pathname === "/sign-up" ? "Sign up" : "Sign in"}
           </Button>
         </div>
       </form>

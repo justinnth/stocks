@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { buttonVariants } from "@/components/atoms/Button"
 import { LoginForm } from "@/components/organisms/LoginForm"
-import { cn } from "@/utils/utils"
+import { cn } from "@/utils/cn"
 
 export const metadata: Metadata = {
   title: "Login to Stocks",
